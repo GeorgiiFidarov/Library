@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<hr style="color: black">
+<span style="display: flex">
+    <a href="http://localhost:8181/books">
+        <input type="button" value="Книги" style="margin-right: 5px">
+    </a>
+    <a href="http://localhost:8181/people">
+        <input type="button" value="Люди">
+    </a>
+</span>
+
+<p th:text="${person.getId()+' - '+person.getName() + ', ' + person.getAgeOfBirth()}">VALUE</p>
+<hr>
+
+<strong>Книги:</strong>
+<div th:switch="${books.size()}">
+    <div th:case="${'0'}">
+        <a>Человек пока не взял ни одной книги</a>
+    </div>
+    <div th:case="*">
+        <hr style="color: black">
+        <div th:each="book : ${books}">
+            <a th:text="${book.getName() + ', ' + book.yearOfProduction}">user</a>
+        </div>
+    </div>
+</div>
+
+<hr style="color: black;">
+<span style="display: flex">
+    <a th:href="@{/people/{id}/edit(id=${person.getId()})}">
+        <input type="button" value="Изменить" style="margin-right: 5px"/>
+    </a>
+
+    <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+        <input type="submit" value="Удалить"/>
+    </form>
+</span>
+<hr style="color: black">
+
+</body>
+</html>

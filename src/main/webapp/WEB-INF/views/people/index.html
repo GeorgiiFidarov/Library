@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<hr style="color: black">
+<div style="display: flex">
+    <a href="http://localhost:8181/books">
+        <input type="button" value="К книгам">
+    </a>
+    <form th:action="@{/people}">
+        <label style="margin:15px">Введите поисковый запрос!
+            <input type="text" th:name="wordToSearch"/>
+        </label>
+        <input type="submit"/>
+    </form>
+</div>
+<hr style="color: black">
+<div style="display: flex">
+    <div>
+        <div th:each="person : ${people}">
+            <a th:href="@{/people/{id}(id=${person.getId()})}"
+               th:text="${person.getName() + ', ' + person.getAgeOfBirth()}">user</a>
+        </div>
+    </div>
+
+</div>
+<br/>
+<hr style="color: black">
+<a href="/people/new">
+    <input type="submit" value="Создать нового человека">
+</a>
+<hr style="color: black">
+</body>
+</html>

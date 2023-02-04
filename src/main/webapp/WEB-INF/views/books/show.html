@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<a href="http://localhost:8181/books">
+    <input type="button" value="К книгам">
+</a>
+
+<hr style="color: black">
+
+<div>
+    <div th:if="${people}">
+        <a>Эта книга свободна. Кому назначить ее?</a>
+            <form th:method="POST" th:action="@{/books/{id}(id=${book.getId()})}">
+                <label for="person">Выберите человека</label>
+                <select th:object="${person}" th:field="*{id}" id="person">
+                    <option th:each="person : ${people}" th:value="${person.getId()}"
+                            th:text="${person.getName()}">Hello</option>
+                </select>
+                <input type="submit" value="Назначить человека">
+            </form>
+    </div>
+    <div th:if="${name}">
+        <p th:text="'Книга сейчас у: '+${name}">VALUE</p>
+            <form th:method="POST" th:action="@{/books/{id}/unset(id=${book.getId()})}">
+                <input type="submit" value="Открепить">
+            </form>
+    </div>
+</div>
+
+<!--
+<p th:text="${book.getName()+', '+book.getAuthor() + ', ' + book.getYearOfProduction()}">VALUE</p>
+<form th:method="POST" th:action="@{/books/{id}(id=${book.getId()})}">
+    <label for="person">Выберите человека</label>
+    <select th:object="${person}" th:field="*{id}" id="person">
+        <option th:each="person : ${people}" th:value="${person.getId()}"
+                th:text="${person.getName()}">Hello</option>
+    </select>
+    <input type="submit" value="Назначить человека">
+</form>
+
+<p th:text="'Книга сейчас у: '+${name}">VALUE</p>
+<form th:method="POST" th:action="@{/books/{id}/unset(id=${book.getId()})}">
+    <input type="submit" value="Открепить">
+</form>
+-->
+
+<!--    ПРИ УСЛОВИИ ЕСЛИ OWNER = 0
+    <div th:switch="${name}">
+        <div th:case="${name}">
+            <a>Эта книга свободна. Кому назначить ее?</a>
+            <form th:method="POST" th:action="@{/books/{id}(id=${book.getId()})}">
+                <label for="person">Выберите человека</label>
+                <select th:object="${person}" th:field="*{id}" id="person">
+                    <option th:each="person : ${people}" th:value="${person.getId()}"
+                    th:text="${person.getName()}">Hello</option>
+                </select>
+                <input type="submit" value="Назначить человека">
+            </form>
+        </div>
+
+        <div th:case="*">
+            <p th:text="'Книга сейчас у: '+${name}">VALUE</p>
+            <form th:method="POST" th:action="@{/books/{id}/unset(id=${book.getId()})}">
+                <input type="submit" value="Открепить">
+            </form>
+        </div>
+    </div>
+-->
+<hr style="color: black">
+
+<div style="display: flex">
+    <a th:href="@{/books/{id}/edit(id=${book.getId()})}">
+        <input type="button" value="Редактировать" style="margin-right: 5px"/>
+    </a>
+
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+        <input type="submit" value="Удалить" style="background-color: crimson"/>
+    </form>
+</div>
+
+
+<hr style="color: black">
+
+<br/>
+</body>
+</html>
