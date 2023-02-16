@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 
 @Entity
@@ -29,6 +30,10 @@ public class Book {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Person owner;
 
+    @Column(name = "checkedIn")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date checkedIn;
+
     public Book(String name, String author, int yearOfProduction) {
         this.name = name;
         this.author = author;
@@ -37,6 +42,14 @@ public class Book {
 
     public Book(){
 
+    }
+
+    public Date getCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(Date checkedIn) {
+        this.checkedIn = checkedIn;
     }
 
     public Person getOwner() {

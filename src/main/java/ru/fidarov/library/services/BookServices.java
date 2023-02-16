@@ -11,6 +11,7 @@ import ru.fidarov.library.models.Person;
 import ru.fidarov.library.repositories.BookRepository;
 import ru.fidarov.library.repositories.PersonRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,12 +61,14 @@ public class BookServices {
     {
         bookRepository.deleteById(id);
     }
+
     @Transactional
     public void setPersonToBook(int id, Person person)
     {
         Optional<Book> bookToBeOwned = bookRepository.findById(id);//находим книгу которую мы присвоим
         assert bookToBeOwned.orElse(null) != null;
         bookToBeOwned.orElse(null).setOwner(person);
+        bookToBeOwned.orElse(null).setCheckedIn(new Date());
     }
     public Person getOwnerId(int id)
     {

@@ -5,13 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.fidarov.library.models.Book;
 import ru.fidarov.library.models.Person;
 import ru.fidarov.library.services.PersonServices;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+
 
 
 @Controller
@@ -44,14 +43,16 @@ public class PeopleController {
 
     //personal page for each of them
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model,@ModelAttribute("person") Person person) {
+    public String show(@PathVariable("id") int id, Model model,@ModelAttribute("person") Person person) throws ParseException {
         model.addAttribute("person", personServices.show(id));
-        model.addAttribute("books", personServices.getSetOfOwners(id));
-        List<Book> temp = new ArrayList<>(personServices.getSetOfOwners(id));
-        System.out.println(temp.size());
-        if (personServices.getSetOfOwners(id).size()==0){
-            model.addAttribute("books", personServices.getSetOfOwners(id));
-        }else {
+        model.addAttribute("checks",personServices.checkDeadLine(id));
+
+        //System.out.println(model.addAttribute("checks",personServices.checkDeadLine(id)));
+
+        if (personServices.checkDeadLine(id).size()==0){
+            model.addAttribute("checks",personServices.checkDeadLine(id));
+        }
+        else {
             model.addAttribute("empty");
         }
         return "people/show";

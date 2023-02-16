@@ -19,14 +19,17 @@
 <hr>
 
 <strong>Книги:</strong>
-<div th:switch="${books.size()}">
+<div th:switch="${checks.size()}">
     <div th:case="${'0'}">
         <a>Человек пока не взял ни одной книги</a>
     </div>
     <div th:case="*">
         <hr style="color: black">
-        <div th:each="book : ${books}">
-            <a th:text="${book.getName() + ', ' + book.yearOfProduction}">user</a>
+        <div th:each="check : ${checks}">
+            <div th:switch="${check.value}">
+                <a th:case="false" th:text="${check.key.getName()}">value</a>
+                <a style="color: red" th:case="true" th:text="${check.key.getName()}">value</a>
+            </div>
         </div>
     </div>
 </div>

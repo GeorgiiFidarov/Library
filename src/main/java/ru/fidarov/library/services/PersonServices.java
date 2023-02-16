@@ -11,9 +11,12 @@ import ru.fidarov.library.models.Person;
 import ru.fidarov.library.repositories.BookRepository;
 import ru.fidarov.library.repositories.PersonRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,6 +46,31 @@ public class PersonServices {
     {
         Optional<Person> foundPerson = personRepository.findById(id);
         return foundPerson.orElse(null);
+    }
+    public Map<Book,Boolean> checkDeadLine(int id) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<Book> booksToCheck = bookRepository.findBookByOwnerId(id);
+        List<Boolean> checker = new ArrayList<>();
+        List<Date> firstDate = new ArrayList<>();
+        List<Long> diffInMillies = new ArrayList<>();
+        Map<Book,Boolean> dict;
+        List<Book> books = new ArrayList<>();
+        if (booksToCheck.size()==0){
+            checker.add(false);
+        }
+        else {
+            for (int i = 0;i<booksToCheck.size();i++){
+                firstDate.add(sdf.parse(booksToCheck.get(i).getCheckedIn().toString()));
+                diffInMillies.add(Math.abs(new Date().getTime() - firstDate.get(i).getTime()));
+                checker.add(TimeUnit.DAYS.convert(diffInMillies.get(i), TimeUnit.MILLISECONDS)>=10);
+                books.add(bookRepository.findAllBooksByOwnerId(id).get(i));
+            }
+        }
+        dict = IntStream.range(0,books.size()).boxed().
+                collect(Collectors.toMap(
+                        books::get,
+                        checker::get));
+        return dict;
     }
     @Transactional
     public void save(Person person)
